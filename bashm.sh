@@ -14,7 +14,14 @@ function bashm {
 
 	local action="$1" # get first parameter.
 
-	if [[ "${action}" == "install" ]]
+	if [[ "${action}" == "init" ]]
+		then
+		
+		local STRING_LOCAL="# This calls for plugins.\n#\n# Example:\n#\tbashm call alias_ls\n#\n\nbashm call alias_ls\n"
+
+		echo -e $STRING_LOCAL > ~/bashm/config.sh
+
+	elif [[ "${action}" == "install" ]]
 		then
 		# this create and install a plugin
 

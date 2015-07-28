@@ -9,7 +9,7 @@ function bashm {
 	# 
 	# Config Plugin
 	# 
-	local URL_TO_DOWNLOAD_PLUGINS="file:///C:/Users/jonathan/bashm/down_plugins/"
+	local URL_TO_DOWNLOAD_PLUGINS="https://cdn.rawgit.com/jonDotsoy/Bash-Manager/develop/down_plugins/"
 	local URL_TO_DOWNLOAD_PLUGINS_END=".sh"
 
 	local action="$1" # get first parameter.

@@ -1,11 +1,9 @@
-echo "REF: ${1}"
-
 # Define Version to Work
 if [[ "${BASHM_VERSION_TO_INSTALL}" == "" ]]
-	then
-	V="0.6.2"
+    then
+    V="0.6.1"
 else
-	V="${BASHM_VERSION_TO_INSTALL}"
+    V="${BASHM_VERSION_TO_INSTALL}"
 fi
 
 E="https://api.github.com/repos/jonDotsoy/Bash-Manager/tarball/$V"
@@ -16,32 +14,31 @@ echo -e "\nConfiguration to install BASHM\n==============================\n\nVer
 
 # echo "mkdir -p ${P}"
 mkdir -p $P
-curl ${E} > $I
+curl -L ${E} > $I
 
-if [[ "$(cat $I)" == "Not Found" ]]
-	then
-	echo
-	echo "Error: No Found ${E}."
+if [[ "$(cat $I)" == "Not Found" || "$(cat $I)" == "" ]]
+    then
+    echo
+    echo "Error: No Found ${E}."
 
 else
 
-	tar -xzvf $I -C $P
+    tar -xzvf $I -C $P
 
-	U=${HOME}/.bashrc
+    U=${HOME}/.bashrc
 
-	echo
-	echo "Initialize autostart in ${U} [Yes/no]:"
-	read _BASHM_INITIALIZE_IN_BASHRC
 
-	if [[ "${_BASHM_INITIALIZE_IN_BASHRC}" == "yes" || "${_BASHM_INITIALIZE_IN_BASHRC}" == "ye" || "${_BASHM_INITIALIZE_IN_BASHRC}" == "y" ]]
-		then
-		echo "# Bash-Manager Configuration" >> ${U}
-		echo "export BASHM_VERSION=\"${V}\"" >> ${U}
-		echo "export BASHM_PATH=\"${P}/Bash-Manager-\${BASHM_VERSION}\"" >> ${U}
-		echo "source \${BASHM_PATH}/bashm.sh" >> ${U}
-	fi
+    if [[ "${_BASHM_INITIALIZE_IN_BASHM}" == "" ]]
+        then
+        echo "# Bash-Manager Configuration" >> ${U}
+        echo "export BASHM_VERSION=\"${V}\"" >> ${U}
+        echo "export _BASHM_INITIALIZE_IN_BASHM=\"no\"" >> ${U}
+        echo "export BASHM_PATH=\"${P}/Bash-Manager-\${BASHM_VERSION}\"" >> ${U}
+        echo "source \${BASHM_PATH}/bashm.sh" >> ${U}
+        echo "" >> ${U}
+    fi
 
-	echo
-	echo "Successful Installation."
+    echo
+    echo "Successful Installation."
 
 fi

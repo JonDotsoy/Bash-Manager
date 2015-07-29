@@ -36,7 +36,7 @@ function bashm {
 		
 		local STRING_LOCAL="# This calls for plugins.\n#\n# Example:\n#\tbashm call alias_ls\n#\n\nbashm call alias_ls\n"
 
-		echo -e $STRING_LOCAL > ~/bashm/config.sh
+		echo -e $STRING_LOCAL > ${BASHM_PATH}/config.sh
 
 	elif [[ "${action}" == "install" ]]
 		then
@@ -55,7 +55,7 @@ function bashm {
 
 		local CORRET_DOWNLOAD=false
 
-		curl ${URL} > ~/bashm/plugin/${name_Plugin}.sh && CORRET_DOWNLOAD=true
+		curl ${URL} > ${BASHM_PATH}/plugin/${name_Plugin}.sh && CORRET_DOWNLOAD=true
 
 		if [[ $CORRET_DOWNLOAD = true ]]
 			then
@@ -64,13 +64,13 @@ function bashm {
 			bashm import ${name_Plugin} 
 		else
 			echo "[BashM:$(date)] Error to Download \"${name_Plugin}\" Plugin."
-			rm ~/bashm/plugin/${name_Plugin}.sh
+			rm ${BASHM_PATH}/plugin/${name_Plugin}.sh
 		fi
 	elif [[ "${action}" == "import" ]]
 		then
 		local name_Plugin="$2"
 
-		echo "bashm call ${name_Plugin}" >> ~/bashm/config.sh
+		echo "bashm call ${name_Plugin}" >> ${BASHM_PATH}/config.sh
 		bashm call ${name_Plugin}
 	elif [[ "${action}" == "call" ]]
 		then
@@ -85,7 +85,7 @@ function bashm {
 			if _bashm_is_calling ${name_Plugin}
 				then
 				_memory_call_bashm+=(${name_Plugin})
-				source ~/bashm/plugin/${name_Plugin}.sh &> /dev/null || echo "[BashM:$(date)] Error to load \"${name_Plugin}\" Plugin."
+				source ${BASHM_PATH}/plugin/${name_Plugin}.sh &> /dev/null || echo "[BashM:$(date)] Error to load \"${name_Plugin}\" Plugin."
 			else
 				echo "[BashM:$(date)] Warning to load \"${name_Plugin}\" Plugin is already loaded."
 			fi
@@ -93,4 +93,4 @@ function bashm {
 	fi
 }
 
-source ~/bashm/config.sh
+source ${BASHM_PATH}/config.sh

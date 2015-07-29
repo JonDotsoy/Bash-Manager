@@ -54,7 +54,13 @@ function existsastatus() {
 }
 
 function getPWD(){
-  if [[ `pwd` == "/" ]]; then
+  if [[ `pwd` == "$HOME" ]]; then
+    if [[ ! "${BASHM_THEME_DOCORATOR_HOME}" == "" ]]; then
+      export PWDSHOW="${BASHM_THEME_DOCORATOR_HOME}"
+    else
+      export PWDSHOW="~"
+    fi
+  elif [[ `pwd` == "/" ]]; then
     export PWDSHOW="(/)"
   else
     _PWDSHOW="${PWD##*/}"

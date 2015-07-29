@@ -1,20 +1,22 @@
+#!/bin/bash
+
 # Define Version to Work
 if [[ "${BASHM_VERSION_TO_INSTALL}" == "" ]]
     then
-    V="0.6.2"
+    V="0.6.1"
 else
     V="${BASHM_VERSION_TO_INSTALL}"
 fi
 
-E="https://api.github.com/repos/jonDotsoy/Bash-Manager/tarball/$V"
-I="/tmp/bashm-$V.tar.gz"
+E="https://api.github.com/repos/jonDotsoy/Bash-Manager/tarball/${V}"
+I="/tmp/bashm-${V}.tar.gz"
 P="$HOME"
 
-echo -e "\nConfiguration to install BASHM\n==============================\n\nVersion            : ${V}\nURL File           : ${E}\nTemporal Files     : ${I}\nURL to Instalation : ${P}\n\n"
+echo -e "\nConfiguration to install BashM\n==============================\n\nVersion            : ${V}\nURL File           : ${E}\nTemporal Files     : ${I}\nURL to Instalation : ${P}\n\n"
 
 # echo "mkdir -p ${P}"
 mkdir -p $P
-curl -L ${E} > $I
+# curl -L ${E} > $I
 
 if [[ "$(cat $I)" == "Not Found" || "$(cat $I)" == "" ]]
     then
@@ -29,7 +31,7 @@ else
     tar -xzvf $I -C $P
 
     # Rename Directory temp
-    mv "$P/${Q}" "${P}/Bash-Manager-$V"
+    mv -f -n "$P/${Q}" "${P}/Bash-Manager-$V"
 
     U=${P}/.bashrc
 
@@ -40,10 +42,14 @@ else
         echo "export BASHM_VERSION=\"${V}\"" >> ${U}
         echo "export _BASHM_INITIALIZE_IN_BASHM=\"no\"" >> ${U}
         echo "export BASHM_PATH=\"${P}/Bash-Manager-\${BASHM_VERSION}\"" >> ${U}
-        echo "source \${BASHM_PATH}/bashm.sh" >> ${U}
+        echo "source \${BASHM_PATH}/bashm.bash" >> ${U}
         echo "" >> ${U}
 
-        source ${P}/Bash-Manager-${V}/bashm.sh
+        export BASHM_VERSION="${V}"
+        export _BASHM_INITIALIZE_IN_BASHM="no"
+        export BASHM_PATH="${P}/Bash-Manager-\${BASHM_VERSION}"
+        source ${BASHM_PATH}/bashm.sh
+
         bashm init
     fi
 

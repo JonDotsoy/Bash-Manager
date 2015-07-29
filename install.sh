@@ -1,3 +1,5 @@
+echo "REF: ${1}"
+
 # Define Version to Work
 if [[ "${BASHM_VERSION_TO_INSTALL}" == "" ]]
 	then
@@ -6,7 +8,7 @@ else
 	V="${BASHM_VERSION_TO_INSTALL}"
 fi
 
-E="https://codeload.github.com/jonDotsoy/Bash-Manager/tar.gz/$V"
+E="https://api.github.com/repos/jonDotsoy/Bash-Manager/tarball/$V"
 I="/tmp/bashm-$V.tar.gz"
 P="$HOME"
 

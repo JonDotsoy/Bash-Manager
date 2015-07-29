@@ -3,7 +3,24 @@
 # - curl 
 # - grep	
 
-memorycall=()
+export _memory_call_bashm=()
+
+# Check if is call a element.
+function _bashm_is_calling {
+	local name_component_compare="$1"
+
+	for i in ${_memory_call_bashm[@]}
+	do
+		# echo "inspect ${i}"
+		if [[ "${i}" == "${name_component_compare}" ]]
+			then
+			# echo "is found ${i}"
+			return 1	
+		fi
+	done
+
+	return 0
+}
 
 function bashm {
 	# 
@@ -26,9 +43,15 @@ function bashm {
 		# this create and install a plugin
 
 		local name_Plugin="$2"
+		local external_URL="$3"
 
 		# Generate URL to Download
 		local URL="${URL_TO_DOWNLOAD_PLUGINS}${name_Plugin}${URL_TO_DOWNLOAD_PLUGINS_END}"
+
+		if [[ ! "${external_URL}" == "" ]]
+			then
+			URL="${external_URL}"
+		fi
 
 		local CORRET_DOWNLOAD=false
 
@@ -40,7 +63,7 @@ function bashm {
 			echo "Download ${name_Plugin} ok."
 			bashm import ${name_Plugin} 
 		else
-			echo "[Bash Plus:$(date)] Error to Download \"${name_Plugin}\" Plugin."
+			echo "[BashM:$(date)] Error to Download \"${name_Plugin}\" Plugin."
 			rm ~/bashm/plugin/${name_Plugin}.sh
 		fi
 	elif [[ "${action}" == "import" ]]
@@ -48,6 +71,7 @@ function bashm {
 		local name_Plugin="$2"
 
 		echo "bashm call ${name_Plugin}" >> ~/bashm/config.sh
+		bashm call ${name_Plugin}
 	elif [[ "${action}" == "call" ]]
 		then
 		# this call a plugin
@@ -56,8 +80,15 @@ function bashm {
 		local name_Plugin="$2"
 		if [[ -n "${name_Plugin}" ]]
 			then
-			memorycall+=(	)
-			source ~/bashm/plugin/${name_Plugin}.sh &> /dev/null || echo "[Bash Plus:$(date)] Error to load \"${name_Plugin}\" Plugin."
+
+			# Check if is precall
+			if _bashm_is_calling ${name_Plugin}
+				then
+				_memory_call_bashm+=(${name_Plugin})
+				source ~/bashm/plugin/${name_Plugin}.sh &> /dev/null || echo "[BashM:$(date)] Error to load \"${name_Plugin}\" Plugin."
+			else
+				echo "[BashM:$(date)] Warning to load \"${name_Plugin}\" Plugin is already loaded."
+			fi
 		fi
 	fi
 }

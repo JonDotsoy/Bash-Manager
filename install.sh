@@ -1,7 +1,7 @@
 # Define Version to Work
 if [[ "${BASHM_VERSION_TO_INSTALL}" == "" ]]
     then
-    V="0.6.1"
+    V="0.6.2"
 else
     V="${BASHM_VERSION_TO_INSTALL}"
 fi
@@ -42,6 +42,9 @@ else
         echo "export BASHM_PATH=\"${P}/Bash-Manager-\${BASHM_VERSION}\"" >> ${U}
         echo "source \${BASHM_PATH}/bashm.sh" >> ${U}
         echo "" >> ${U}
+
+        source ${P}/Bash-Manager-${V}/bashm.sh
+        bashm init
     fi
 
     echo

@@ -38,7 +38,7 @@ function bashm {
 
 		echo -e $STRING_LOCAL > ${BASHM_PATH}/config.sh
 
-	elif [[ "${action}" == "install" ]]
+	elif [[ "${action}" == "install" || "${action}" == "i" ]]
 		then
 		# this create and install a plugin
 

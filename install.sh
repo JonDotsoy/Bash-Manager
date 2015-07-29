@@ -1,7 +1,7 @@
 # Define Version to Work
 if [[ "${BASHM_VERSION_TO_INSTALL}" == "" ]]
 	then
-	V="0.6.1"
+	V="0.6.2"
 else
 	V="${BASHM_VERSION_TO_INSTALL}"
 fi

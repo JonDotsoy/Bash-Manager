@@ -23,9 +23,15 @@ if [[ "$(cat $I)" == "Not Found" || "$(cat $I)" == "" ]]
 
 else
 
+    # Get Directori content
+    Q=$(tar -tzf ${I} | head -1 | sed -e 's/\/.*//')
+
     tar -xzvf $I -C $P
 
-    U=${HOME}/.bashrc
+    # Rename Directory temp
+    mv "$P/${Q}" "${P}/Bash-Manager-$V"
+
+    U=${P}/.bashrc
 
 
     if [[ "${_BASHM_INITIALIZE_IN_BASHM}" == "" ]]

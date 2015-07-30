@@ -9,11 +9,11 @@ Como instalar
 
 ### En windows
 
-> **NOTA:** Windows no posee `bash` por su defecto, recomendamos instalar [cygwin](https://www.cygwin.com/) o Instalar el cliente [git](https://www.git-scm.com/).
+> **NOTA:** Windows no posee `bash` por su defecto, recomendamos instalar [Cygwin](https://www.cygwin.com/) o [MSYS-git UNIX tools](https://msysgit.github.io/).
 
 ```
-curl -L https://cdn.rawgit.com/jonDotsoy/Bash-Manager/master/install.sh | sh
-``` 
+curl -L URLDOWNLOAD | bash
+```
 
 Install a Complement
 --------------------

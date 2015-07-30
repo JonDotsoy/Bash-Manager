@@ -1,3 +1,4 @@
 !.gitignore
 plugin/
 config.sh
+.bash_history

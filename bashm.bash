@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 # Requeriments:
 # - bash
-# - curl 
-# - grep	
+# - curl
 
 export _memory_call_bashm=()
 
@@ -56,7 +55,7 @@ function bashm {
 
 		local CORRET_DOWNLOAD=false
 
-		curl ${URL} > ${BASHM_PATH}/plugin/${name_Plugin}.bash && CORRET_DOWNLOAD=true
+		curl -L "${URL}" > ${BASHM_PATH}/plugin/${name_Plugin}.bash && CORRET_DOWNLOAD=true
 
 		if [[ $CORRET_DOWNLOAD = true ]]
 			then

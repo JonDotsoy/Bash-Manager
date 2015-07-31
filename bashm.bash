@@ -5,9 +5,25 @@
 
 export _memory_call_bashm=()
 
+# Log Event
+function log {
+    local TYPE="$(echo ${1} | tr "[:lower:]" "[:upper:]")"
+    local MESSAGE="${2}"
+
+    if [[ "${MESSAGE}" == "" ]]
+        then
+        MESSAGE="${TYPE}"
+        TYPE="LOG"
+    fi
+
+    echo "[${TYPE}]: ${MESSAGE}"
+}
+
+
 # Check if is call a element.
 function _bashm_is_calling {
 	local name_component_compare="$1"
+	local forceIgnore="$2"
 
 	for i in ${_memory_call_bashm[@]}
 	do
@@ -15,7 +31,7 @@ function _bashm_is_calling {
 		if [[ "${i}" == "${name_component_compare}" ]]
 			then
 			# echo "is found ${i}"
-			return 1	
+			return 1
 		fi
 	done
 
@@ -39,50 +55,79 @@ function bashm {
 		echo -e $STRING_LOCAL > ${BASHM_PATH}/config.bash
 
 	elif [[ "${action}" == "install" || "${action}" == "i" ]]
+		# bashm [install|i] <Plugin Name> [URL] [Force]
+		# 
+		# Plugin Name: Nombre del plugin a instalar.
+		# URL:         Indica la url para descargar el complemento.
+		# Forlce:      En caso de ya existir 'force' ignora el actual complemento. 
+		# 
+		# Ex: > bashm install alias_ls force
+		#     > bashm i alias_ls http://api.google.cl/s force
+		#     > bashm i alias_ls
 		then
 		# this create and install a plugin
 
 		local name_Plugin="$2"
 		local external_URL="$3"
+		local forseInstall="$4"
 
-		# Generate URL to Download
-		local URL="${URL_TO_DOWNLOAD_PLUGINS}${name_Plugin}${URL_TO_DOWNLOAD_PLUGINS_END}"
-
-		if [[ ! "${external_URL}" == "" ]]
-			then
-			URL="${external_URL}"
+		if [[ "${forseInstall}" == "" ]]; then
+			if [[ "${external_URL}" == "force" ]]; then
+				forseInstall="force"
+				external_URL=""
+			fi
 		fi
 
-		local CORRET_DOWNLOAD=false
+		if [[ ! -f "${BASHM_PATH}/plugin/${name_Plugin}.bash" || "${forseInstall}" == "force" ]]; then
+			# Generate URL to Download
+			local URL="${URL_TO_DOWNLOAD_PLUGINS}${name_Plugin}${URL_TO_DOWNLOAD_PLUGINS_END}"
 
-		curl -L "${URL}" > ${BASHM_PATH}/plugin/${name_Plugin}.bash && CORRET_DOWNLOAD=true
+			if [[ ! "${external_URL}" == "" ]]
+				then
+				URL="${external_URL}"
+			fi
 
-		if [[ $CORRET_DOWNLOAD = true ]]
-			then
-			#statements
-			echo "Download ${name_Plugin} ok."
-			bashm import ${name_Plugin} 
+			local CORRET_DOWNLOAD=false
+
+			curl -L "${URL}" > ${BASHM_PATH}/plugin/${name_Plugin}.bash && CORRET_DOWNLOAD=true
+
+			if [[ $CORRET_DOWNLOAD = true ]]
+				then
+				#statements
+				echo "Download ${name_Plugin} ok."
+				bashm import ${name_Plugin} 
+			else
+				echo "[BashM:$(date)] Error to Download \"${name_Plugin}\" Plugin."
+				rm ${BASHM_PATH}/plugin/${name_Plugin}.bash
+			fi
 		else
-			echo "[BashM:$(date)] Error to Download \"${name_Plugin}\" Plugin."
-			rm ${BASHM_PATH}/plugin/${name_Plugin}.bash
+			log warn "already it exists complement '${BASHM_PATH}/plugin/${name_Plugin}.bash'."
 		fi
+
 	elif [[ "${action}" == "import" ]]
 		then
 		local name_Plugin="$2"
 
-		echo "bashm call ${name_Plugin}" >> ${BASHM_PATH}/config.bash
-		bashm call ${name_Plugin}
+		if _bashm_is_calling ${name_Plugin}
+			then
+			echo "bashm call ${name_Plugin}" >> ${BASHM_PATH}/config.bash
+		fi
+
+		bashm call ${name_Plugin} force
+
 	elif [[ "${action}" == "call" ]]
 		then
 		# this call a plugin
 
 		# Var second parameter
 		local name_Plugin="$2"
+		local forlceLoad="$3"
+
 		if [[ -n "${name_Plugin}" ]]
 			then
 
 			# Check if is precall
-			if _bashm_is_calling ${name_Plugin}
+			if _bashm_is_calling ${name_Plugin} || [[ "${forlceLoad}" == "force" ]]
 				then
 				_memory_call_bashm+=(${name_Plugin})
 				source ${BASHM_PATH}/plugin/${name_Plugin}.bash &> /dev/null || echo "[BashM:$(date)] Error to load \"${name_Plugin}\" Plugin."
@@ -90,6 +135,7 @@ function bashm {
 				echo "[BashM:$(date)] Warning to load \"${name_Plugin}\" Plugin is already loaded."
 			fi
 		fi
+    
 	fi
 }
 

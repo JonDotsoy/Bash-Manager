@@ -10,14 +10,42 @@ function log {
     local TYPE="$(echo ${1} | tr "[:lower:]" "[:upper:]")"
     local MESSAGE="${2}"
 
+    # Configure Colors
+    local COLORERROR="\e[5;41;30m"
+    local COLORINFO="\e[1;40;30m"
+    local COLORWARN="\e[5;43;30m"
+    local COLORLOG="\e[1;40;34m"
+
+    local TYPECOLOR="${COLORLOG}"
+    local MESSAGECOLOR="\e[0m" # Reset Color
+    # echo -e "\e[1;31;42m Yes it is awful \e[0m"
+
     if [[ "${MESSAGE}" == "" ]]
         then
         MESSAGE="${TYPE}"
         TYPE="LOG"
     fi
 
-    echo "[${TYPE}]: ${MESSAGE}"
+    if [[ "${TYPE}" == "LOG" ]]; then
+    	TYPECOLOR="${COLORLOG}"
+    fi
+
+    if [[ "${TYPE}" == "ERROR" ]]; then
+    	TYPECOLOR="${COLORERROR}"
+    fi
+
+    if [[ "${TYPE}" == "WARN" ]]; then
+    	TYPECOLOR="${COLORWARN}"
+    fi
+
+    if [[ "${TYPE}" == "INFO" ]]; then
+    	TYPECOLOR="${COLORINFO}"
+    fi
+
+    echo -e ${TYPECOLOR}'['${TYPE}']:'${MESSAGECOLOR}' '${MESSAGE}''
 }
+
+log ERROR "Lorem ipsum dolor sit amet."
 
 
 # Check if is call a element.

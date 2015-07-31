@@ -45,8 +45,6 @@ function log {
     echo -e ${TYPECOLOR}'['${TYPE}']:'${MESSAGECOLOR}' '${MESSAGE}''
 }
 
-log ERROR "Lorem ipsum dolor sit amet."
-
 
 # Check if is call a element.
 function _bashm_is_calling {

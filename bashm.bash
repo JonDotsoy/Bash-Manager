@@ -7,39 +7,52 @@ export _memory_call_bashm=()
 
 # Log Event
 function log {
-    local TYPE="$(echo ${1} | tr "[:lower:]" "[:upper:]")"
+    local TYPE="${1}"
     local MESSAGE="${2}"
 
     # Configure Colors
-    local COLORERROR="\e[5;41;30m"
-    local COLORINFO="\e[1;40;30m"
-    local COLORWARN="\e[5;43;30m"
-    local COLORLOG="\e[1;40;34m"
+    local COLORERROR="\e[1;40;31m"
+    local COLORINFO="\e[1;40;34m"
+    local COLORWARN="\e[1;40;33m"
+    local COLORLOG="\e[1;40;30m"
+    local COLORSUCCESS="\e[1;40;32m"
 
     local TYPECOLOR="${COLORLOG}"
     local MESSAGECOLOR="\e[0m" # Reset Color
     # echo -e "\e[1;31;42m Yes it is awful \e[0m"
 
+    # Empty message.
     if [[ "${MESSAGE}" == "" ]]
         then
         MESSAGE="${TYPE}"
         TYPE="LOG"
     fi
 
+    TYPE="$(echo ${TYPE} | tr "[:lower:]" "[:upper:]")"
+
     if [[ "${TYPE}" == "LOG" ]]; then
     	TYPECOLOR="${COLORLOG}"
+      TYPE="LOG"
     fi
 
-    if [[ "${TYPE}" == "ERROR" ]]; then
+    if [[ "${TYPE}" == "ERROR" ||  "${TYPE}" == "ERR" ]]; then
     	TYPECOLOR="${COLORERROR}"
+      TYPE="ERROR"
     fi
 
-    if [[ "${TYPE}" == "WARN" ]]; then
+    if [[ "${TYPE}" == "WARN" ||  "${TYPE}" == "WAR" || "${TYPE}" == "WARNNING" ]]; then
     	TYPECOLOR="${COLORWARN}"
+      TYPE="WARN"
     fi
 
-    if [[ "${TYPE}" == "INFO" ]]; then
-    	TYPECOLOR="${COLORINFO}"
+    if [[ "${TYPE}" == "INFO" || "${TYPE}" == "INF" || "${TYPE}" == "INFORMATION" ]]; then
+      TYPECOLOR="${COLORINFO}"
+      TYPE="INFO"
+    fi
+
+    if [[ "${TYPE}" == "SUCCESS" || "${TYPE}" == "OK" ]]; then
+      TYPECOLOR="${COLORSUCCESS}"
+      TYPE="OK"
     fi
 
     echo -e ${TYPECOLOR}'['${TYPE}']:'${MESSAGECOLOR}' '${MESSAGE}''

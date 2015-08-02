@@ -3,8 +3,6 @@
 # - bash
 # - curl
 
-# 
-
 export _memory_call_bashm=()
 
 # Log Event
@@ -88,7 +86,10 @@ function bashm {
 
 	local action="$1" # get first parameter.
 
-	if [[ "${action}" == "init" ]]
+  if [[ "${action}" == "version" || "${action}" == "-v" ]]; then
+    echo "BashM, Version 0.0.0 (GNU bash)"
+    echo "Copyright (C) 2015, Jon Dotsoy <hi@jon.soy> (http://jon.soy/)."
+	elif [[ "${action}" == "init" ]]
 		then
 
 		local STRING_LOCAL="#!/usr/bin/env bash\n# This calls for plugins.\n#\n# Example:\n#\tbashm call alias_ls\n#\n\nbashm call alias_ls\n"

@@ -12,7 +12,7 @@ Nos gusta trabajar con complementos para los distintas aplicaciones, BASHm permi
 1. [Como instalar](#como-instalar)
 2. [Instalar un Complemento](#instalar-un-complemento)
 3. [Opciones](#opciones)
-3.1. [Dentro de `.bashrc` o `.bash_profile`](#dentro-de-bashrc-o-bash_profile)
+4.     1. [Dentro de `.bashrc` o `.bash_profile`](#dentro-de-bashrc-o-bash_profile)
 4. [Log Function](#log-function)
 
 

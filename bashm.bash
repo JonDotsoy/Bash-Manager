@@ -91,7 +91,7 @@ function bashm {
     local action="$1" # get first parameter.
 
   if [[ "${action}" == "version" || "${action}" == "-v" ]]; then
-    echo "BashM, Version 0.0.0 (GNU bash)"
+    echo "BashM, Version 1.0.1 (GNU bash)"
     echo "Copyright (C) 2015, Jon Dotsoy <hi@jon.soy> (http://jon.soy/)."
     elif [[ "${action}" == "init" ]]
         then
